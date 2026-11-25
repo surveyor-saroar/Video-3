@@ -1,71 +1,68 @@
-/* Card Staggered Jump-Up Entrance */
-.fan-card {
-  --tilt: 0deg;
-  --y: 0px;
-  --scale: 1;
+/* Updated Red Cross / Strikethrough Effect */
+.elim-chip {
+  position: relative;
+  background: #15151b;
+  border: 1.5px solid rgba(255, 77, 77, 0.45);
+  color: #e4e4e7;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  overflow: visible;
+  box-shadow: 0 0 18px rgba(255, 59, 48, 0.14);
+}
+
+/* Animated Diagonal Red Cross Slash */
+.elim-chip::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  top: 50%;
+  width: 116%;
+  height: 3.5px;
+  background: linear-gradient(90deg, #ff2a2a, #ff5e5e, #ff1e1e);
+  border-radius: 999px;
+  transform: translateY(-50%) rotate(-9deg) scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+  box-shadow:
+    0 0 10px rgba(255, 42, 42, 0.9),
+    0 0 22px rgba(255, 42, 42, 0.5);
+  pointer-events: none;
+}
+
+/* Red Cross Badge / X Accent */
+.elim-chip::before {
+  content: "✕";
+  position: absolute;
+  top: -9px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff2a2a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
-  transform: translateY(95px) scale(0.72) rotate(var(--tilt));
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
-  will-change: transform, opacity;
+  transform: scale(0.4) rotate(-25deg);
+  transition: transform 0.4s cubic-bezier(0.22, 1.4, 0.36, 1) 0.35s, opacity 0.3s ease 0.35s;
+  box-shadow: 0 0 14px rgba(255, 42, 42, 0.85);
 }
 
-.fan-card:nth-child(1) {
-  --tilt: -11deg;
-  --y: 14px;
+/* Trigger Red Cross when parent reveals or on hover */
+.reveal.visible .elim-chip::after,
+.elim-chip.crossed::after,
+.elim-chip:hover::after {
+  transform: translateY(-50%) rotate(-9deg) scaleX(1);
 }
 
-.fan-card:nth-child(2) {
-  --tilt: -5deg;
-  --y: 5px;
-}
-
-.fan-card.featured {
-  --tilt: 0deg;
-  --y: -6px;
-  --scale: 1.06;
-  border: 2px solid #ffb703;
-  box-shadow:
-    0 22px 44px rgba(0, 0, 0, 0.9),
-    0 0 32px rgba(255, 183, 3, 0.26);
-}
-
-.fan-card:nth-child(4) {
-  --tilt: 5deg;
-  --y: 5px;
-}
-
-.fan-card:nth-child(5) {
-  --tilt: 11deg;
-  --y: 14px;
-}
-
-.fan-card.jump-in {
+.reveal.visible .elim-chip::before,
+.elim-chip.crossed::before,
+.elim-chip:hover::before {
   opacity: 1;
-  animation: cardJumpUp 0.78s cubic-bezier(0.22, 1.38, 0.36, 1) forwards;
-}
-
-@keyframes cardJumpUp {
-  0% {
-    opacity: 0;
-    transform: translateY(95px) scale(0.72) rotate(calc(var(--tilt) * 0.6));
-  }
-  58% {
-    opacity: 1;
-    transform: translateY(calc(var(--y) - 24px)) scale(calc(var(--scale) * 1.05)) rotate(var(--tilt));
-  }
-  78% {
-    transform: translateY(calc(var(--y) + 6px)) scale(calc(var(--scale) * 0.98)) rotate(var(--tilt));
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(var(--y)) scale(var(--scale)) rotate(var(--tilt));
-  }
-}
-
-.fan-card.jump-in:hover {
-  transform: translateY(-16px) scale(1.08) rotate(0deg);
-  border-color: #ffd166;
-  box-shadow:
-    0 24px 48px rgba(0, 0, 0, 0.92),
-    0 0 36px rgba(255, 183, 3, 0.38);
+  transform: scale(1) rotate(0deg);
 }
