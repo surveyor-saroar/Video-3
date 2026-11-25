@@ -1,13 +1,68 @@
-/* Checkmark (✓) Before .elim-chip Instead of Red Cross */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  background: #090d16 !important;
+  color: #f4f4f6 !important;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Force all sections and main containers visible on dark background */
+body > *,
+section,
+main,
+header,
+footer,
+.container,
+.wrapper,
+[class*="scene"],
+[class*="section"],
+[class*="card"],
+[class*="box"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+section,
+main,
+header,
+footer {
+  background-color: transparent !important;
+}
+
+.headline-lg {
+  color: #ffffff !important;
+  font-size: clamp(2rem, 4.4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.3px;
+  margin-bottom: 14px;
+}
+
+.subcopy {
+  color: #d4d4d8 !important;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+/* Green Checkmark (✓) on .elim-chip */
 .elim-chip {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #15151b;
-  border: 1.5px solid rgba(34, 197, 94, 0.55);
-  color: #f4f4f6;
+  background: #15151b !important;
+  border: 1.5px solid rgba(34, 197, 94, 0.55) !important;
+  color: #f4f4f6 !important;
   padding: 11px 22px;
   border-radius: 999px;
   font-size: 1.08rem;
@@ -16,13 +71,11 @@
   box-shadow: 0 0 18px rgba(34, 197, 94, 0.18);
 }
 
-/* Remove Diagonal Strikethrough Line */
 .elim-chip::after {
   content: none !important;
   display: none !important;
 }
 
-/* Green Checkmark (✓) at the Front/Left */
 .elim-chip::before {
   content: "✓";
   display: inline-flex;
