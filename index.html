@@ -77,50 +77,26 @@
       width: 100vw;
       height: 100vh;
       z-index: 5;
-      perspective: 1200px;
     }
 
-    /* Smooth Scene Transition */
     .scene {
       position: absolute;
       inset: 0;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 40px 28px 165px;
       background: transparent;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: scale(0.95) translateY(18px);
-      filter: blur(8px);
-      transition:
-        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.55s ease,
-        visibility 0s linear 0.65s;
+      opacity: 1;
+      visibility: visible;
     }
 
     .scene.active {
+      display: flex;
       opacity: 1;
       visibility: visible;
-      pointer-events: auto;
-      transform: scale(1) translateY(0);
-      filter: blur(0);
-      transition:
-        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.55s ease,
-        visibility 0s;
-    }
-
-    .scene.leaving {
-      opacity: 0;
-      visibility: visible;
-      transform: scale(1.04) translateY(-16px);
-      filter: blur(8px);
     }
 
     .eyebrow {
@@ -311,7 +287,6 @@
       gap: 6px;
     }
 
-    /* Dropper Highlight Effect */
     .dropper-active-target {
       outline: 2.5px solid var(--drop-color, #fbbf24) !important;
       box-shadow: 0 0 28px var(--drop-glow, rgba(251, 191, 36, 0.55)) !important;
@@ -319,7 +294,6 @@
       transition: outline 0.25s ease, box-shadow 0.25s ease;
     }
 
-    /* নিচ থেকে ১ ইঞ্চি (96px) উপরে হাইলাইট ভয়েসওভার বাটন */
     #voiceoverBtn {
       position: fixed;
       left: 50%;
@@ -332,4 +306,693 @@
       padding: 11px 24px;
       border-radius: 999px;
       border: 1.5px solid rgba(251, 191, 36, 0.75);
-      background: linear
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(15, 23, 42, 0.92));
+      color: #fbbf24;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 24px rgba(251, 191, 36, 0.35);
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    #voiceoverBtn:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.03);
+      box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
+    }
+
+    #voiceoverBtn.speaking {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #090d16;
+      box-shadow: 0 0 32px rgba(251, 191, 36, 0.8);
+    }
+
+    .bottom-controls {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 0 24px;
+      pointer-events: none;
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    #highlightBtn,
+    #dropperBtn {
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #highlightBtn {
+      border: 1.5px solid #fbbf24;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #090d16;
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+
+    #dropperBtn {
+      border: 1.5px solid rgba(251, 191, 36, 0.55);
+      background: rgba(15, 23, 42, 0.85);
+      color: #fbbf24;
+    }
+
+    #highlightBtn:hover,
+    #dropperBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #bottom-caption {
+      pointer-events: auto;
+      background-color: rgba(9, 13, 22, 0.24);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 7px 18px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      backdrop-filter: blur(6px);
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 30;
+    }
+
+    #progressBar {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fbbf24, #22c55e);
+      transition: width 0.1s linear;
+    }
+
+    .scene-counter {
+      position: fixed;
+      right: 76px;
+      bottom: 20px;
+      z-index: 30;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      font-weight: 700;
+    }
+
+    #replay {
+      position: fixed;
+      right: 24px;
+      bottom: 18px;
+      z-index: 30;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(251, 191, 36, 0.45);
+      background: rgba(15, 23, 42, 0.9);
+      color: #fbbf24;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" src="music3.mp3" loop preload="auto"></audio>
+
+  <canvas id="particles"></canvas>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="brand">
+    <span class="brand-mark">✦</span>
+    <span>SUCCESS <small>OF SKILL</small></span>
+  </header>
+
+  <main id="stage">
+
+    <section class="scene active" data-caption="✦ সিন ০১: নিজের আইডিয়া দিয়েই অসাধারণ ডিজাইন তৈরি করুন" data-voice="অথচ নিজেই বানাতে পারেন! নিজের আইডিয়াকে রূপ দিন অসাধারণ ডিজাইনে।" data-drop-color="#fbbf24">
+      <p class="eyebrow">CREATIVE • AI • DESIGN</p>
+      <h1>অথচ <em>নিজেই</em><br>বানাতে পারেন</h1>
+
+      <div class="floating-cards hero-cards">
+        <article class="mini-card">
+          <span>✦ AI DESIGN</span>
+          <div class="fake-photo photo-a"></div>
+          <b>Creative</b>
+        </article>
+
+        <article class="mini-card">
+          <span>✦ MOTION</span>
+          <div class="fake-photo photo-b"></div>
+          <b>Graphics</b>
+        </article>
+
+        <article class="mini-card">
+          <span>✦ VIDEO</span>
+          <div class="fake-photo photo-c"></div>
+          <b>Content</b>
+        </article>
+      </div>
+
+      <p class="subline">নিজের আইডিয়াকে রূপ দিন অসাধারণ ডিজাইনে</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০২: একটি প্রম্পট থেকেই শুরু হোক নতুন সৃষ্টি" data-voice="ভাবনাকে বাস্তবে রূপ দিন। একটি প্রম্পট থেকেই শুরু হতে পারে নতুন সৃষ্টি।" data-drop-color="#38bdf8">
+      <div class="searchbar">
+        <span>⌕</span>
+        <span class="typing">আপনার আইডিয়া লিখুন, model দিয়ে...</span>
+        <b>✦ তৈরি করুন</b>
+      </div>
+
+      <div class="chips">
+        <span>AI Image</span>
+        <span>Video</span>
+        <span>Motion</span>
+      </div>
+
+      <h2>ভাবনাকে বাস্তবে রূপ দিন</h2>
+      <p class="subline">একটি prompt থেকেই শুরু হতে পারে নতুন সৃষ্টি</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৩: ভিডিও এডিটিং ও এআই ক্রিয়েটিভ স্কিল শিখুন" data-voice="শিখুন নতুন স্কিল, নিজের দক্ষতাকে নিয়ে যান পরবর্তী ধাপে।" data-drop-color="#10b981">
+      <div class="showcase">
+        <div class="portrait">
+          <div class="person-shape"></div>
+          <span>VIDEO EDIT</span>
+        </div>
+
+        <div class="portrait portrait-two">
+          <div class="person-shape"></div>
+          <span>AI CREATIVE</span>
+        </div>
+      </div>
+
+      <h2>শিখুন <em>নতুন</em> স্কিল</h2>
+      <p class="subline">নিজের দক্ষতাকে নিয়ে যান পরবর্তী ধাপে</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৪: SUCCESS OF SKILL — AI Motion Graphics" data-voice="সাকসেস অফ স্কিল — এআই মোশন গ্রাফিক্স, সৃজনশীলতার নতুন দিগন্ত।" data-drop-color="#fbbf24">
+      <div class="logo-large">
+        <span>✦</span> SUCCESS
+        <small>OF SKILL</small>
+      </div>
+
+      <h2>AI Motion <em>Graphics</em></h2>
+      <p class="subline">সৃজনশীলতার নতুন দিগন্ত</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৫: ডিজাইন, ভিডিও, ব্র্যান্ডিং ও মার্কেটিংয়ে গ্রো করুন" data-voice="আপনার বিজনেস গ্রো হোক। ডিজাইন, ভিডিও, ব্র্যান্ডিং ও মার্কেটিং দিয়ে এগিয়ে যান।" data-drop-color="#f59e0b">
+      <h2>আপনার business <em>গ্রো</em> হোক</h2>
+
+      <div class="service-grid">
+        <div>✦<b>ডিজাইন</b></div>
+        <div>◈<b>ভিডিও</b></div>
+        <div>▣<b>ব্র্যান্ডিং</b></div>
+        <div>✧<b>মার্কেটিং</b></div>
+        <div>⌘<b>কনটেন্ট</b></div>
+        <div>◉<b>এডিটিং</b></div>
+        <div>✺<b>AI Tools</b></div>
+        <div>＋<b>আরও</b></div>
+      </div>
+
+      <p class="subline">আপনার আইডিয়াই হতে পারে পরবর্তী সফলতা</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৬: ভয়েসওভার ও প্রফেশনাল এডিটিং শিখুন" data-voice="আপনি শিখবেন ভয়েসওভার, প্রফেশনাল এডিট এবং ক্রিয়েটিভ প্রেজেন্টেশন।" data-drop-color="#10b981">
+      <div class="floating-cards voice-cards">
+        <article class="mini-card">
+          <div class="fake-photo photo-b"></div>
+          <b>Voiceover</b>
+        </article>
+
+        <article class="mini-card">
+          <div class="fake-photo photo-a"></div>
+          <b>Professional Edit</b>
+        </article>
+      </div>
+
+      <h2>আপনি <em>শিখবেন</em></h2>
+      <p class="subline">Informative hook, storytelling ও creative presentation</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৭: কোর্সের সাথে ২টি FREE Bonus" data-voice="কোর্স কিনলেই পাচ্ছেন দুইটা ফ্রি বোনাস—প্রিমিয়াম রিসোর্স ও এক্সট্রা টেমপ্লেট।" data-drop-color="#22c55e">
+      <h2>course কিনলেই পাচ্ছেন</h2>
+      <h1 class="bonus">দুইটা <em>FREE bonus</em></h1>
+
+      <div class="bonus-pills">
+        <span>✦ Premium Resources</span>
+        <span>✦ Extra Templates</span>
+      </div>
+
+      <p class="subline">শেখার পথে বাড়তি সুবিধা</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৮: কাজের স্কিল গড়ার বাস্তব কোর্স" data-voice="আমরা সবসময় কোর্স বানাই না, আমরা বানাই কাজের কোর্স।" data-drop-color="#fbbf24">
+      <p class="eyebrow">YOUR NEXT STEP</p>
+      <h2>আমরা সবসময় course বানাই না</h2>
+      <h1>কাজের <em>course</em></h1>
+
+      <div class="gold-button">✦ শুরু করুন</div>
+
+      <p class="subline">দক্ষতা গড়ুন, নিজের ভবিষ্যৎ তৈরি করুন</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ০৯: দেরি না করে আজই শুরু করুন" data-voice="দেরি না করুন, আজই শুরু করুন আপনার সৃজনশীল যাত্রা।" data-drop-color="#22c55e">
+      <div class="cta-pills">
+        <span>✓ Qualified Video</span>
+        <span>✓ Customer Focus</span>
+      </div>
+
+      <h2>দেরি না করুন,</h2>
+      <h1><em>আজই</em> শুরু করুন</h1>
+
+      <p class="subline">আপনার সৃজনশীল যাত্রা শুরু হোক আজ থেকে</p>
+    </section>
+
+    <section class="scene" data-caption="✦ সিন ১০: SUCCESS OF SKILL — Create your success" data-voice="এআই মোশন গ্রাফিক্স — আপনার ব্র্যান্ড এগিয়ে নিন। সাকসেস অফ স্কিল!" data-drop-color="#fbbf24">
+      <div class="logo-large">
+        <span>✦</span> SUCCESS
+        <small>OF SKILL</small>
+      </div>
+
+      <h2>AI Motion <em>Graphics</em></h2>
+
+      <div class="final-banner">
+        <b>AI Motion Graphics</b>
+        <strong>আপনার brand এগিয়ে নিন</strong>
+        <span>শিখুন • তৈরি করুন • সফল হোন</span>
+      </div>
+
+      <p class="subline">SUCCESS OF SKILL — Create your success</p>
+    </section>
+
+  </main>
+
+  <button id="voiceoverBtn" type="button">🎙️ হাইলাইট ভয়েসওভার</button>
+
+  <div class="bottom-controls">
+    <div id="bottom-caption">✦ সিন ০১: নিজের আইডিয়া দিয়েই অসাধারণ ডিজাইন তৈরি করুন</div>
+    <div class="action-row">
+      <button id="dropperBtn" type="button">💧 ড্রপার হাইলাইট</button>
+      <button id="highlightBtn" type="button">✦ হাইলাইট দেখুন</button>
+    </div>
+  </div>
+
+  <div class="progress">
+    <span id="progressBar"></span>
+  </div>
+
+  <div class="scene-counter" id="counter">01 / 10</div>
+
+  <button id="replay" type="button">↻</button>
+
+  <script>
+    (function () {
+      const scenes = Array.from(document.querySelectorAll("#stage .scene"));
+      const counterEl = document.getElementById("counter");
+      const progressBar = document.getElementById("progressBar");
+      const replayBtn = document.getElementById("replay");
+      const highlightBtn = document.getElementById("highlightBtn");
+      const dropperBtn = document.getElementById("dropperBtn");
+      const voiceoverBtn = document.getElementById("voiceoverBtn");
+      const bottomCaption = document.getElementById("bottom-caption");
+      const bgMusic = document.getElementById("bgMusic");
+
+      const SCENE_DURATION = 3000;
+      const BG_VOLUME = 0.07;
+      const WEB_SOUND_GAIN = 0.28;
+
+      let currentIndex = 0;
+      let sceneStartTime = performance.now();
+      let pausedElapsed = 0;
+      let isPlaying = true;
+      let isFinished = false;
+      let rafId = null;
+      let audioCtx = null;
+      let dropperIndex = 0;
+
+      if (bgMusic) {
+        bgMusic.volume = BG_VOLUME;
+      }
+
+      function startBgMusic(restart = false) {
+        if (!bgMusic || !isPlaying || isFinished) return;
+        bgMusic.volume = BG_VOLUME;
+        if (restart) {
+          bgMusic.currentTime = 0;
+        }
+        bgMusic.play().catch(() => {});
+      }
+
+      function stopBgMusic(resetToStart = false) {
+        if (!bgMusic) return;
+        bgMusic.pause();
+        if (resetToStart) {
+          bgMusic.currentTime = 0;
+        }
+      }
+
+      function playSceneWebSound(stepIndex = 0, isDropper = false) {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+
+          if (!audioCtx) {
+            audioCtx = new AudioContextClass();
+          }
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume().catch(() => {});
+          }
+
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = isDropper ? "sine" : "triangle";
+          const startFreq = isDropper ? 540 : 320 + (stepIndex % 6) * 50;
+          const endFreq = isDropper ? 880 : startFreq * 1.4;
+
+          osc.frequency.setValueAtTime(startFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.18);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(WEB_SOUND_GAIN, now + 0.025);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } catch (_) {}
+      }
+
+      function speakHighlightVoiceover(scene) {
+        if (!scene) return;
+        const text =
+          scene.getAttribute("data-voice") ||
+          scene.getAttribute("data-caption") ||
+          "";
+
+        if ("speechSynthesis" in window && text) {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(text);
+          utter.lang = "bn-BD";
+          utter.rate = 1.02;
+          utter.pitch = 1.05;
+
+          utter.onstart = () => {
+            if (voiceoverBtn) {
+              voiceoverBtn.classList.add("speaking");
+              voiceoverBtn.textContent = "🔊 ভয়েসওভার চলছে...";
+            }
+          };
+          utter.onend = utter.onerror = () => {
+            if (voiceoverBtn) {
+              voiceoverBtn.classList.remove("speaking");
+              voiceoverBtn.textContent = "🎙️ হাইলাইট ভয়েসওভার";
+            }
+          };
+
+          window.speechSynthesis.speak(utter);
+        } else if (voiceoverBtn) {
+          voiceoverBtn.classList.add("speaking");
+          setTimeout(() => voiceoverBtn.classList.remove("speaking"), 900);
+        }
+      }
+
+      function clearDropperHighlights() {
+        document.querySelectorAll(".dropper-active-target").forEach((el) => {
+          el.classList.remove("dropper-active-target");
+          el.style.removeProperty("--drop-color");
+          el.style.removeProperty("--drop-glow");
+        });
+      }
+
+      function triggerDropperHighlight(scene) {
+        if (!scene) return;
+        clearDropperHighlights();
+
+        const candidates = Array.from(
+          scene.querySelectorAll(
+            "h1, h2, .mini-card, .searchbar, .chips span, .bonus-pills span, .cta-pills span, .portrait, .logo-large, .service-grid > div, .gold-button, .final-banner"
+          )
+        );
+
+        if (!candidates.length) return;
+
+        const target = candidates[dropperIndex % candidates.length];
+        dropperIndex += 1;
+
+        const accent = scene.getAttribute("data-drop-color") || "#fbbf24";
+        target.style.setProperty("--drop-color", accent);
+        target.style.setProperty("--drop-glow", accent + "88");
+        target.classList.add("dropper-active-target");
+
+        if (typeof target.animate === "function") {
+          target.animate(
+            [
+              { transform: "scale(1)" },
+              { transform: "scale(1.07)", offset: 0.45 },
+              { transform: "scale(1)" }
+            ],
+            { duration: 550, easing: "cubic-bezier(0.22, 1.35, 0.36, 1)" }
+          );
+        }
+
+        if (dropperBtn) {
+          dropperBtn.style.borderColor = accent;
+          dropperBtn.style.color = accent;
+        }
+
+        if (bottomCaption) {
+          const label = (target.innerText || "").replace(/\s+/g, " ").trim().slice(0, 36);
+          const baseCap = scene.getAttribute("data-caption") || "";
+          bottomCaption.textContent = label ? `💧 ${label} — ${baseCap}` : baseCap;
+          bottomCaption.style.borderColor = accent + "99";
+        }
+      }
+
+      function popBounceElements(scene) {
+        if (!scene) return;
+        scene.animate(
+          [
+            { transform: "scale(0.96)" },
+            { transform: "scale(1.01)", offset: 0.55 },
+            { transform: "scale(1)" }
+          ],
+          {
+            duration: 500,
+            easing: "cubic-bezier(0.22, 1.35, 0.36, 1)"
+          }
+        );
+
+        const items = scene.querySelectorAll(
+          ".eyebrow, h1, h2, .subline, .mini-card, .searchbar, .chips span, .bonus-pills span, .cta-pills span, .portrait, .logo-large, .service-grid > div, .gold-button, .final-banner"
+        );
+
+        items.forEach((el, idx) => {
+          if (typeof el.animate !== "function") return;
+          el.animate(
+            [
+              { transform: "translateY(24px) scale(0.9)" },
+              { transform: "translateY(-9px) scale(1.04)", offset: 0.6 },
+              { transform: "translateY(3px) scale(0.99)", offset: 0.82 },
+              { transform: "translateY(0) scale(1)" }
+            ],
+            {
+              duration: 700,
+              delay: Math.min(idx * 65, 390),
+              easing: "cubic-bezier(0.22, 1.35, 0.36, 1)"
+            }
+          );
+        });
+      }
+
+      function updateCaption(scene) {
+        if (!bottomCaption || !scene) return;
+        const text = scene.getAttribute("data-caption");
+        if (text) {
+          bottomCaption.textContent = text;
+        }
+      }
+
+      function showScene(index, playSound = true) {
+        if (!scenes.length) return;
+        clearDropperHighlights();
+        dropperIndex = 0;
+
+        currentIndex = ((index % scenes.length) + scenes.length) % scenes.length;
+        const nextScene = scenes[currentIndex];
+
+        scenes.forEach((sec, i) => {
+          sec.classList.toggle("active", i === currentIndex);
+        });
+
+        if (counterEl) {
+          const num = String(currentIndex + 1).padStart(2, "0");
+          const total = String(scenes.length).padStart(2, "0");
+          counterEl.textContent = `${num} / ${total}`;
+        }
+
+        updateCaption(nextScene);
+        sceneStartTime = performance.now();
+        pausedElapsed = 0;
+        popBounceElements(nextScene);
+
+        if (playSound) {
+          playSceneWebSound(currentIndex, false);
+        }
+      }
+
+      function startAnimationLoop() {
+        if (rafId) cancelAnimationFrame(rafId);
+        isPlaying = true;
+        isFinished = false;
+        sceneStartTime = performance.now() - pausedElapsed;
+        startBgMusic(false);
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function pauseAnimationLoop(resetMusic = false) {
+        isPlaying = false;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        pausedElapsed = performance.now() - sceneStartTime;
+        stopBgMusic(resetMusic);
+      }
+
+      function restartPresentation() {
+        if (rafId) cancelAnimationFrame(rafId);
+        if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+        isPlaying = true;
+        isFinished = false;
+        pausedElapsed = 0;
+        showScene(0, true);
+        startBgMusic(true);
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function tick(now) {
+        if (!isPlaying) return;
+
+        const elapsed = now - sceneStartTime;
+        const ratio = Math.min(elapsed / SCENE_DURATION, 1);
+
+        if (progressBar) {
+          const overall = ((currentIndex + ratio) / scenes.length) * 100;
+          progressBar.style.width = `${overall}%`;
+        }
+
+        if (elapsed >= SCENE_DURATION) {
+          if (currentIndex < scenes.length - 1) {
+            showScene(currentIndex + 1, true);
+          } else {
+            if (progressBar) progressBar.style.width = "100%";
+            isFinished = true;
+            isPlaying = false;
+            rafId = null;
+            stopBgMusic(true);
+            return;
+          }
+        }
+
+        rafId = requestAnimationFrame(tick);
+      }
+
+      if (voiceoverBtn) {
+        voiceoverBtn.addEventListener("click", () => {
+          if (isPlaying && !isFinished) startBgMusic(false);
+          playSceneWebSound(currentIndex, true);
+          triggerDropperHighlight(scenes[currentIndex]);
+          speakHighlightVoiceover(scenes[currentIndex]);
+        });
+      }
+
+      if (dropperBtn) {
+        dropperBtn.addEventListener("click", () => {
+          if (isPlaying && !isFinished) startBgMusic(false);
+          playSceneWebSound(currentIndex, true);
+          triggerDropperHighlight(scenes[currentIndex]);
+        });
+      }
+
+      if (highlightBtn) {
+        highlightBtn.addEventListener("click", () => {
+          if (isPlaying && !isFinished) startBgMusic(false);
+          playSceneWebSound(currentIndex + 2, false);
+          popBounceElements(scenes[currentIndex]);
+
+          highlightBtn.animate(
+            [
+              { transform: "scale(1)" },
+              { transform: "scale(1.12)", offset: 0.45 },
+              { transform: "scale(1)" }
+            ],
+            { duration: 700, easing: "ease-out" }
+          );
+        });
+      }
+
+      ["click", "keydown"].forEach((evt) => {
+        document.addEventListener(
+          evt,
+          () => {
+            if (isPlaying && !isFinished) {
+              startBgMusic(false);
+            }
+          },
+          { once: true }
+        );
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          if (isFinished) {
+            restartPresentation();
+          } else if (isPlaying) {
+            pauseAnimationLoop(false);
+          } else {
+            startAnimationLoop();
+          }
+        } else if (e.key === "r" || e.key === "R") {
+          restartPresentation();
+        }
+      });
+
+      if (replayBtn) {
+        replayBtn.addEventListener("click", () => {
+          restartPresentation();
+        });
+      }
+
+      showScene(0, false);
+      startBgMusic(false);
+      rafId = requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>
