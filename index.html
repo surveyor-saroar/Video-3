@@ -77,22 +77,50 @@
       width: 100vw;
       height: 100vh;
       z-index: 5;
+      perspective: 1200px;
     }
 
+    /* Smooth Scene Transition */
     .scene {
       position: absolute;
       inset: 0;
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 40px 28px 115px;
+      padding: 40px 28px 125px;
       background: transparent;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: scale(0.95) translateY(18px);
+      filter: blur(8px);
+      transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.55s ease,
+        visibility 0s linear 0.65s;
     }
 
     .scene.active {
-      display: flex;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+      filter: blur(0);
+      transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.55s ease,
+        visibility 0s;
+    }
+
+    .scene.leaving {
+      opacity: 0;
+      visibility: visible;
+      transform: scale(1.04) translateY(-16px);
+      filter: blur(8px);
     }
 
     .eyebrow {
@@ -283,6 +311,14 @@
       gap: 6px;
     }
 
+    /* Dropper Highlight Effect */
+    .dropper-active-target {
+      outline: 2.5px solid var(--drop-color, #fbbf24) !important;
+      box-shadow: 0 0 28px var(--drop-glow, rgba(251, 191, 36, 0.55)) !important;
+      border-radius: 16px;
+      transition: outline 0.25s ease, box-shadow 0.25s ease;
+    }
+
     .bottom-controls {
       position: fixed;
       left: 0;
@@ -406,7 +442,7 @@
 
   <main id="stage">
 
-    <section class="scene active" data-caption="✦ সিন ০১: নিজের আইডিয়া দিয়েই অসাধারণ ডিজাইন তৈরি করুন">
+    <section class="scene active" data-caption="✦ সিন ০১: নিজের আইডিয়া দিয়েই অসাধারণ ডিজাইন তৈরি করুন" data-drop-color="#fbbf24">
       <p class="eyebrow">CREATIVE • AI • DESIGN</p>
       <h1>অথচ <em>নিজেই</em><br>বানাতে পারেন</h1>
 
@@ -433,7 +469,7 @@
       <p class="subline">নিজের আইডিয়াকে রূপ দিন অসাধারণ ডিজাইনে</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০২: একটি প্রম্পট থেকেই শুরু হোক নতুন সৃষ্টি">
+    <section class="scene" data-caption="✦ সিন ০২: একটি প্রম্পট থেকেই শুরু হোক নতুন সৃষ্টি" data-drop-color="#38bdf8">
       <div class="searchbar">
         <span>⌕</span>
         <span class="typing">আপনার আইডিয়া লিখুন, model দিয়ে...</span>
@@ -450,7 +486,7 @@
       <p class="subline">একটি prompt থেকেই শুরু হতে পারে নতুন সৃষ্টি</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৩: ভিডিও এডিটিং ও এআই ক্রিয়েটিভ স্কিল শিখুন">
+    <section class="scene" data-caption="✦ সিন ০৩: ভিডিও এডিটিং ও এআই ক্রিয়েটিভ স্কিল শিখুন" data-drop-color="#10b981">
       <div class="showcase">
         <div class="portrait">
           <div class="person-shape"></div>
@@ -467,7 +503,7 @@
       <p class="subline">নিজের দক্ষতাকে নিয়ে যান পরবর্তী ধাপে</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৪: SUCCESS OF SKILL — AI Motion Graphics">
+    <section class="scene" data-caption="✦ সিন ০৪: SUCCESS OF SKILL — AI Motion Graphics" data-drop-color="#fbbf24">
       <div class="logo-large">
         <span>✦</span> SUCCESS
         <small>OF SKILL</small>
@@ -477,7 +513,7 @@
       <p class="subline">সৃজনশীলতার নতুন দিগন্ত</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৫: ডিজাইন, ভিডিও, ব্র্যান্ডিং ও মার্কেটিংয়ে গ্রো করুন">
+    <section class="scene" data-caption="✦ সিন ০৫: ডিজাইন, ভিডিও, ব্র্যান্ডিং ও মার্কেটিংয়ে গ্রো করুন" data-drop-color="#f59e0b">
       <h2>আপনার business <em>গ্রো</em> হোক</h2>
 
       <div class="service-grid">
@@ -494,7 +530,7 @@
       <p class="subline">আপনার আইডিয়াই হতে পারে পরবর্তী সফলতা</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৬: ভয়েসওভার ও প্রফেশনাল এডিটিং শিখুন">
+    <section class="scene" data-caption="✦ সিন ০৬: ভয়েসওভার ও প্রফেশনাল এডিটিং শিখুন" data-drop-color="#10b981">
       <div class="floating-cards voice-cards">
         <article class="mini-card">
           <div class="fake-photo photo-b"></div>
@@ -511,7 +547,7 @@
       <p class="subline">Informative hook, storytelling ও creative presentation</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৭: কোর্সের সাথে ২টি FREE Bonus">
+    <section class="scene" data-caption="✦ সিন ০৭: কোর্সের সাথে ২টি FREE Bonus" data-drop-color="#22c55e">
       <h2>course কিনলেই পাচ্ছেন</h2>
       <h1 class="bonus">দুইটা <em>FREE bonus</em></h1>
 
@@ -523,7 +559,7 @@
       <p class="subline">শেখার পথে বাড়তি সুবিধা</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৮: কাজের স্কিল গড়ার বাস্তব কোর্স">
+    <section class="scene" data-caption="✦ সিন ০৮: কাজের স্কিল গড়ার বাস্তব কোর্স" data-drop-color="#fbbf24">
       <p class="eyebrow">YOUR NEXT STEP</p>
       <h2>আমরা সবসময় course বানাই না</h2>
       <h1>কাজের <em>course</em></h1>
@@ -533,7 +569,7 @@
       <p class="subline">দক্ষতা গড়ুন, নিজের ভবিষ্যৎ তৈরি করুন</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ০৯: দেরি না করে আজই শুরু করুন">
+    <section class="scene" data-caption="✦ সিন ০৯: দেরি না করে আজই শুরু করুন" data-drop-color="#22c55e">
       <div class="cta-pills">
         <span>✓ Qualified Video</span>
         <span>✓ Customer Focus</span>
@@ -545,7 +581,7 @@
       <p class="subline">আপনার সৃজনশীল যাত্রা শুরু হোক আজ থেকে</p>
     </section>
 
-    <section class="scene" data-caption="✦ সিন ১০: SUCCESS OF SKILL — Create your success">
+    <section class="scene" data-caption="✦ সিন ১০: SUCCESS OF SKILL — Create your success" data-drop-color="#fbbf24">
       <div class="logo-large">
         <span>✦</span> SUCCESS
         <small>OF SKILL</small>
@@ -591,26 +627,38 @@
       const bottomCaption = document.getElementById("bottom-caption");
       const bgMusic = document.getElementById("bgMusic");
 
-      const SCENE_DURATION = 3000; // ৩ সেকেন্ড প্রতি সিন
-      const BG_VOLUME = 0.07; // ব্যাকগ্রাউন্ড সাউন্ড 7%
-      const WEB_SOUND_GAIN = 0.28; // ওয়েব সাউন্ড স্পষ্ট ভলিউম (28%)
+      const SCENE_DURATION = 3000;
+      const BG_VOLUME = 0.07;
+      const WEB_SOUND_GAIN = 0.28;
 
       let currentIndex = 0;
       let sceneStartTime = performance.now();
+      let pausedElapsed = 0;
+      let isPlaying = true;
+      let isFinished = false;
       let rafId = null;
       let audioCtx = null;
+      let dropperIndex = 0;
 
       if (bgMusic) {
         bgMusic.volume = BG_VOLUME;
       }
 
-      function playBgMusic(restart = false) {
-        if (!bgMusic) return;
+      function startBgMusic(restart = false) {
+        if (!bgMusic || !isPlaying || isFinished) return;
         bgMusic.volume = BG_VOLUME;
         if (restart) {
           bgMusic.currentTime = 0;
         }
         bgMusic.play().catch(() => {});
+      }
+
+      function stopBgMusic(resetToStart = false) {
+        if (!bgMusic) return;
+        bgMusic.pause();
+        if (resetToStart) {
+          bgMusic.currentTime = 0;
+        }
       }
 
       function playSceneWebSound(stepIndex = 0, isDropper = false) {
@@ -630,8 +678,8 @@
           const gain = audioCtx.createGain();
 
           osc.type = isDropper ? "sine" : "triangle";
-          const startFreq = isDropper ? 520 : 320 + (stepIndex % 6) * 50;
-          const endFreq = isDropper ? 840 : startFreq * 1.4;
+          const startFreq = isDropper ? 540 : 320 + (stepIndex % 6) * 50;
+          const endFreq = isDropper ? 880 : startFreq * 1.4;
 
           osc.frequency.setValueAtTime(startFreq, now);
           osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.18);
@@ -646,6 +694,58 @@
           osc.start(now);
           osc.stop(now + 0.3);
         } catch (_) {}
+      }
+
+      function clearDropperHighlights() {
+        document.querySelectorAll(".dropper-active-target").forEach((el) => {
+          el.classList.remove("dropper-active-target");
+          el.style.removeProperty("--drop-color");
+          el.style.removeProperty("--drop-glow");
+        });
+      }
+
+      function triggerDropperHighlight(scene) {
+        if (!scene) return;
+        clearDropperHighlights();
+
+        const candidates = Array.from(
+          scene.querySelectorAll(
+            "h1, h2, .mini-card, .searchbar, .chips span, .bonus-pills span, .cta-pills span, .portrait, .logo-large, .service-grid > div, .gold-button, .final-banner"
+          )
+        );
+
+        if (!candidates.length) return;
+
+        const target = candidates[dropperIndex % candidates.length];
+        dropperIndex += 1;
+
+        const accent = scene.getAttribute("data-drop-color") || "#fbbf24";
+        target.style.setProperty("--drop-color", accent);
+        target.style.setProperty("--drop-glow", accent + "88");
+        target.classList.add("dropper-active-target");
+
+        if (typeof target.animate === "function") {
+          target.animate(
+            [
+              { transform: "scale(1)" },
+              { transform: "scale(1.07)", offset: 0.45 },
+              { transform: "scale(1)" }
+            ],
+            { duration: 550, easing: "cubic-bezier(0.22, 1.35, 0.36, 1)" }
+          );
+        }
+
+        if (dropperBtn) {
+          dropperBtn.style.borderColor = accent;
+          dropperBtn.style.color = accent;
+        }
+
+        if (bottomCaption) {
+          const label = (target.innerText || "").replace(/\s+/g, " ").trim().slice(0, 36);
+          const baseCap = scene.getAttribute("data-caption") || "";
+          bottomCaption.textContent = label ? `💧 ${label} — ${baseCap}` : baseCap;
+          bottomCaption.style.borderColor = accent + "99";
+        }
       }
 
       function popBounceElements(scene) {
@@ -682,11 +782,23 @@
 
       function showScene(index, playSound = true) {
         if (!scenes.length) return;
-        currentIndex = ((index % scenes.length) + scenes.length) % scenes.length;
+        clearDropperHighlights();
+        dropperIndex = 0;
 
-        scenes.forEach((sec, i) => {
-          sec.classList.toggle("active", i === currentIndex);
+        const prevScene = scenes[currentIndex];
+        currentIndex = ((index % scenes.length) + scenes.length) % scenes.length;
+        const nextScene = scenes[currentIndex];
+
+        scenes.forEach((sec) => {
+          sec.classList.remove("active", "leaving");
         });
+
+        if (prevScene && prevScene !== nextScene) {
+          prevScene.classList.add("leaving");
+          setTimeout(() => prevScene.classList.remove("leaving"), 650);
+        }
+
+        nextScene.classList.add("active");
 
         if (counterEl) {
           const num = String(currentIndex + 1).padStart(2, "0");
@@ -694,16 +806,48 @@
           counterEl.textContent = `${num} / ${total}`;
         }
 
-        updateCaption(scenes[currentIndex]);
+        updateCaption(nextScene);
         sceneStartTime = performance.now();
-        popBounceElements(scenes[currentIndex]);
+        pausedElapsed = 0;
+        popBounceElements(nextScene);
 
         if (playSound) {
           playSceneWebSound(currentIndex, false);
         }
       }
 
+      function startAnimationLoop() {
+        if (rafId) cancelAnimationFrame(rafId);
+        isPlaying = true;
+        isFinished = false;
+        sceneStartTime = performance.now() - pausedElapsed;
+        startBgMusic(false);
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function pauseAnimationLoop(resetMusic = false) {
+        isPlaying = false;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        pausedElapsed = performance.now() - sceneStartTime;
+        stopBgMusic(resetMusic);
+      }
+
+      function restartPresentation() {
+        if (rafId) cancelAnimationFrame(rafId);
+        isPlaying = true;
+        isFinished = false;
+        pausedElapsed = 0;
+        showScene(0, true);
+        startBgMusic(true);
+        rafId = requestAnimationFrame(tick);
+      }
+
       function tick(now) {
+        if (!isPlaying) return;
+
         const elapsed = now - sceneStartTime;
         const ratio = Math.min(elapsed / SCENE_DURATION, 1);
 
@@ -715,8 +859,14 @@
         if (elapsed >= SCENE_DURATION) {
           if (currentIndex < scenes.length - 1) {
             showScene(currentIndex + 1, true);
-          } else if (progressBar) {
-            progressBar.style.width = "100%";
+          } else {
+            // ১০ নম্বর সিন শেষ হলে অ্যানিমেশন ও ব্যাকগ্রাউন্ড মিউজিক দুটোই অটো বন্ধ হবে
+            if (progressBar) progressBar.style.width = "100%";
+            isFinished = true;
+            isPlaying = false;
+            rafId = null;
+            stopBgMusic(true);
+            return;
           }
         }
 
@@ -725,24 +875,15 @@
 
       if (dropperBtn) {
         dropperBtn.addEventListener("click", () => {
-          playBgMusic(false);
+          if (isPlaying && !isFinished) startBgMusic(false);
           playSceneWebSound(currentIndex, true);
-          if (bottomCaption) {
-            bottomCaption.animate(
-              [
-                { transform: "scale(1)" },
-                { transform: "scale(1.06)", offset: 0.45 },
-                { transform: "scale(1)" }
-              ],
-              { duration: 500, easing: "ease-out" }
-            );
-          }
+          triggerDropperHighlight(scenes[currentIndex]);
         });
       }
 
       if (highlightBtn) {
         highlightBtn.addEventListener("click", () => {
-          playBgMusic(false);
+          if (isPlaying && !isFinished) startBgMusic(false);
           playSceneWebSound(currentIndex + 2, false);
           popBounceElements(scenes[currentIndex]);
 
@@ -757,21 +898,43 @@
         });
       }
 
+      // প্রথম ইউজার ইন্টারঅ্যাকশনে ব্রাউজার অডিও আনলক করে মিউজিক চালু করবে (যদি অ্যানিমেশন চলমান থাকে)
       ["click", "keydown"].forEach((evt) => {
-        document.addEventListener(evt, () => playBgMusic(false), { once: true });
+        document.addEventListener(
+          evt,
+          () => {
+            if (isPlaying && !isFinished) {
+              startBgMusic(false);
+            }
+          },
+          { once: true }
+        );
+      });
+
+      // Space দিয়ে পজ/প্লে (সাথে মিউজিকও পজ/প্লে) এবং R দিয়ে রিস্টার্ট
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          if (isFinished) {
+            restartPresentation();
+          } else if (isPlaying) {
+            pauseAnimationLoop(false);
+          } else {
+            startAnimationLoop();
+          }
+        } else if (e.key === "r" || e.key === "R") {
+          restartPresentation();
+        }
       });
 
       if (replayBtn) {
         replayBtn.addEventListener("click", () => {
-          cancelAnimationFrame(rafId);
-          playBgMusic(true);
-          showScene(0, true);
-          rafId = requestAnimationFrame(tick);
+          restartPresentation();
         });
       }
 
       showScene(0, false);
-      playBgMusic(false);
+      startBgMusic(false);
       rafId = requestAnimationFrame(tick);
     })();
   </script>
