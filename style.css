@@ -1,19 +1,39 @@
-/* Automatic Red Cross Effect on .elim-chip (No Mouse Dependency) */
+/* Force Auto Pop-Up Bounce */
+.force-pop-hide {
+  opacity: 0 !important;
+  transform: translateY(36px) scale(0.82) !important;
+}
+
+.force-pop-run {
+  opacity: 1 !important;
+  animation: forcePopBounceAnim 0.72s cubic-bezier(0.22, 1.45, 0.36, 1) forwards !important;
+}
+
+@keyframes forcePopBounceAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(36px) scale(0.82);
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(-14px) scale(1.07);
+  }
+  78% {
+    transform: translateY(5px) scale(0.97);
+  }
+  90% {
+    transform: translateY(-3px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Red Cross on .elim-chip */
 .elim-chip {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #15151b;
-  border: 1.5px solid rgba(255, 77, 77, 0.55);
-  color: #f4f4f6;
-  padding: 11px 22px;
-  border-radius: 999px;
-  font-size: 1.08rem;
-  font-weight: 700;
   overflow: visible;
-  box-shadow: 0 0 18px rgba(255, 59, 48, 0.18);
-  will-change: transform, opacity;
 }
 
 .elim-chip::after {
@@ -25,12 +45,9 @@
   height: 3.5px;
   background: linear-gradient(90deg, #ff2a2a, #ff6b6b, #ff1e1e);
   border-radius: 999px;
-  transform: translateY(-50%) rotate(-9deg) scaleX(0);
+  transform: translateY(-50%) rotate(-9deg) scaleX(1);
   transform-origin: left center;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
-  box-shadow:
-    0 0 10px rgba(255, 42, 42, 0.9),
-    0 0 22px rgba(255, 42, 42, 0.5);
+  box-shadow: 0 0 12px rgba(255, 42, 42, 0.85);
   pointer-events: none;
 }
 
@@ -49,48 +66,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transform: scale(0.4) rotate(-25deg);
-  transition: transform 0.4s cubic-bezier(0.22, 1.4, 0.36, 1) 0.3s, opacity 0.3s ease 0.3s;
   box-shadow: 0 0 14px rgba(255, 42, 42, 0.85);
   pointer-events: none;
-}
-
-.elim-chip.auto-pop-active::after {
-  transform: translateY(-50%) rotate(-9deg) scaleX(1);
-}
-
-.elim-chip.auto-pop-active::before {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
-}
-
-/* Automatic Pop-Up Animation (No Mouse Dependency) */
-.auto-pop-hidden {
-  opacity: 0;
-  transform: translateY(34px) scale(0.82);
-  will-change: transform, opacity;
-}
-
-.auto-pop-active {
-  opacity: 1;
-  animation: autoSmoothPopUp 0.65s cubic-bezier(0.22, 1.42, 0.36, 1) forwards;
-}
-
-@keyframes autoSmoothPopUp {
-  0% {
-    opacity: 0;
-    transform: translateY(34px) scale(0.82);
-  }
-  62% {
-    opacity: 1;
-    transform: translateY(-10px) scale(1.06);
-  }
-  82% {
-    transform: translateY(4px) scale(0.98);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
