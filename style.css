@@ -1,4 +1,20 @@
-/* Red Cross Mark on .elim-chip */
+html,
+body {
+  background-color: #090d16 !important;
+  background: #090d16 !important;
+  color: #f4f4f6 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+body > *,
+section,
+main,
+div {
+  background-color: transparent;
+  opacity: 1;
+  visibility: visible;
+}/* Red Cross Mark on .elim-chip */
 .elim-chip {
   position: relative;
   display: inline-flex;
