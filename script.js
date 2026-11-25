@@ -1,60 +1,139 @@
 (function () {
-  function startAutoBounce() {
-    const candidates = document.querySelectorAll(
-      '.elim-chip, .bonus-card, .skill-card, .feature-card, .module-card, .faq-item, .cta-btn, .card, [class*="card"], [class*="chip"], [class*="box"]'
-    );
+  function runBounceAnimation(el, delay) {
+    if (!el || el.dataset.doneBounce === "true") return;
+    el.dataset.doneBounce = "true";
 
-    const targets = Array.from(candidates).filter((el) => {
-      if (el.classList.contains('fan-card')) return false;
-      if (el.tagName === 'BODY' || el.tagName === 'HTML' || el.tagName === 'SECTION') return false;
-      const rect = el.getBoundingClientRect();
-      return rect.width > 20 && rect.height > 15;
-    });
+    setTimeout(() => {
+      try {
+        el.style.opacity = "1";
+        el.style.visibility = "visible";
 
-    function playBounce(el, delay) {
-      if (el.dataset.bounced === 'true') return;
-      el.dataset.bounced = 'true';
-      setTimeout(() => {
-        el.classList.remove('force-pop-hide');
-        void el.offsetWidth;
-        el.classList.add('force-pop-run');
-      }, delay);
-    }
+        if (typeof el.animate === "function") {
+          const anim = el.animate(
+            [
+              {
+                opacity: 0,
+                transform: "translateY(38px) scale(0.82)"
+              },
+              {
+                opacity: 1,
+                transform: "translateY(-14px) scale(1.07)",
+                offset: 0.58
+              },
+              {
+                opacity: 1,
+                transform: "translateY(5px) scale(0.97)",
+                offset: 0.78
+              },
+              {
+                opacity: 1,
+                transform: "translateY(-3px) scale(1.02)",
+                offset: 0.9
+              },
+              {
+                opacity: 1,
+                transform: "translateY(0px) scale(1)"
+              }
+            ],
+            {
+              duration: 720,
+              delay: 0,
+              easing: "cubic-bezier(0.22, 1.45, 0.36, 1)",
+              fill: "both"
+            }
+          );
 
-    targets.forEach((el) => {
-      el.classList.add('force-pop-hide');
-    });
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        let step = 0;
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          playBounce(entry.target, step * 110);
-          step += 1;
-          obs.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.08 }
-    );
-
-    targets.forEach((el) => observer.observe(el));
-
-    // Also trigger immediately for elements already visible on screen
-    let visibleStep = 0;
-    targets.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
-        playBounce(el, 120 + visibleStep * 110);
-        visibleStep += 1;
-        observer.unobserve(el);
+          anim.onfinish = () => {
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0px) scale(1)";
+          };
+        } else {
+          el.style.transition = "transform 0.5s ease, opacity 0.5s ease";
+          el.style.transform = "translateY(0px) scale(1)";
+        }
+      } catch (err) {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0px) scale(1)";
       }
-    });
+    }, delay);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startAutoBounce);
+  function initAutoBounce() {
+    const allElements = Array.from(document.querySelectorAll("body *"));
+
+    const targets = allElements.filter((el) => {
+      const tag = el.tagName;
+      if (
+        ["SCRIPT", "STYLE", "LINK", "META", "HEAD", "HTML", "BODY", "SVG", "PATH", "G", "CIRCLE", "RECT", "LINE", "POLYGON", "BR", "HR"].includes(tag)
+      ) {
+        return false;
+      }
+      if (el.classList && el.classList.contains("fan-card")) {
+        return false;
+      }
+
+      const rect = el.getBoundingClientRect();
+      const style = window.getComputedStyle(el);
+
+      const isVisibleBox = rect.width >= 30 && rect.height >= 20 && style.display !== "none";
+      const looksLikeCardOrItem =
+        style.borderRadius !== "0px" ||
+        style.boxShadow !== "none" ||
+        style.backgroundColor !== "rgba(0, 0, 0, 0)" ||
+        tag === "BUTTON" ||
+        tag === "A" ||
+        tag === "H1" ||
+        tag === "H2" ||
+        tag === "H3";
+
+      return isVisibleBox && looksLikeCardOrItem && el.children.length <= 8;
+    });
+
+    targets.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(38px) scale(0.82)";
+    });
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          let idx = 0;
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            runBounceAnimation(entry.target, idx * 90);
+            idx += 1;
+            obs.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.05 }
+      );
+
+      targets.forEach((el) => observer.observe(el));
+    }
+
+    // Immediate run for items on screen or fallback if observer doesn't fire
+    let immediateIdx = 0;
+    targets.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        runBounceAnimation(el, 100 + immediateIdx * 90);
+        immediateIdx += 1;
+      }
+    });
+
+    // Safety fallback so nothing stays stuck at opacity: 0
+    setTimeout(() => {
+      targets.forEach((el, i) => {
+        if (el.dataset.doneBounce !== "true") {
+          runBounceAnimation(el, i * 60);
+        }
+      });
+    }, 1800);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAutoBounce);
   } else {
-    startAutoBounce();
+    initAutoBounce();
   }
 })();
