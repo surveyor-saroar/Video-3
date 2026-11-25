@@ -87,7 +87,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 40px 28px;
+      padding: 40px 28px 90px;
       background: transparent;
     }
 
@@ -283,6 +283,37 @@
       gap: 6px;
     }
 
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 18px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 0 24px;
+    }
+
+    #highlightBtn {
+      padding: 11px 24px;
+      border-radius: 999px;
+      border: 1.5px solid #fbbf24;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #090d16;
+      font-size: 0.98rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 0 22px rgba(251, 191, 36, 0.45);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #highlightBtn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 28px rgba(251, 191, 36, 0.7);
+    }
+
     .progress {
       position: fixed;
       left: 0;
@@ -298,7 +329,7 @@
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #fbbf24, #22c55e);
-      transition: width 0.2s linear;
+      transition: width 0.1s linear;
     }
 
     .scene-counter {
@@ -502,6 +533,10 @@
 
   </main>
 
+  <div class="bottom-bar">
+    <button id="highlightBtn" type="button">✦ হাইলাইট দেখুন</button>
+  </div>
+
   <div class="progress">
     <span id="progressBar"></span>
   </div>
@@ -516,14 +551,16 @@
       const counterEl = document.getElementById("counter");
       const progressBar = document.getElementById("progressBar");
       const replayBtn = document.getElementById("replay");
+      const highlightBtn = document.getElementById("highlightBtn");
       const bgMusic = document.getElementById("bgMusic");
 
-      const SCENE_DURATION = 3200;
-      const BG_VOLUME = 0.05; // 5% Volume
+      const SCENE_DURATION = 1000; // 1k = 1000ms (1 সেকেন্ড)
+      const BG_VOLUME = 0.07; // ব্যাকগ্রাউন্ড সাউন্ড 7%
 
       let currentIndex = 0;
       let sceneStartTime = performance.now();
       let rafId = null;
+      let audioCtx = null;
 
       if (bgMusic) {
         bgMusic.volume = BG_VOLUME;
@@ -538,6 +575,39 @@
         bgMusic.play().catch(() => {});
       }
 
+      function playSceneWebSound(stepIndex = 0) {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+
+          if (!audioCtx) {
+            audioCtx = new AudioContextClass();
+          }
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume().catch(() => {});
+          }
+
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = "triangle";
+          const baseFreq = 340 + (stepIndex % 5) * 55;
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.35, now + 0.14);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.18);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.19);
+        } catch (_) {}
+      }
+
       function popBounceElements(scene) {
         const items = scene.querySelectorAll(
           ".eyebrow, h1, h2, .subline, .mini-card, .searchbar, .chips span, .bonus-pills span, .cta-pills span, .portrait, .logo-large, .service-grid > div, .gold-button, .final-banner"
@@ -547,14 +617,14 @@
           if (typeof el.animate !== "function") return;
           el.animate(
             [
-              { transform: "translateY(28px) scale(0.88)" },
-              { transform: "translateY(-11px) scale(1.05)", offset: 0.6 },
-              { transform: "translateY(4px) scale(0.98)", offset: 0.82 },
+              { transform: "translateY(26px) scale(0.88)" },
+              { transform: "translateY(-10px) scale(1.05)", offset: 0.6 },
+              { transform: "translateY(3px) scale(0.98)", offset: 0.82 },
               { transform: "translateY(0) scale(1)" }
             ],
             {
-              duration: 650,
-              delay: Math.min(idx * 85, 650),
+              duration: 1000,
+              delay: Math.min(idx * 60, 400),
               easing: "cubic-bezier(0.22, 1.35, 0.36, 1)",
               fill: "both"
             }
@@ -562,7 +632,7 @@
         });
       }
 
-      function showScene(index) {
+      function showScene(index, playSound = true) {
         if (!scenes.length) return;
         currentIndex = ((index % scenes.length) + scenes.length) % scenes.length;
 
@@ -578,6 +648,9 @@
 
         sceneStartTime = performance.now();
         popBounceElements(scenes[currentIndex]);
+        if (playSound) {
+          playSceneWebSound(currentIndex);
+        }
       }
 
       function tick(now) {
@@ -591,13 +664,30 @@
 
         if (elapsed >= SCENE_DURATION) {
           if (currentIndex < scenes.length - 1) {
-            showScene(currentIndex + 1);
+            showScene(currentIndex + 1, true);
           } else if (progressBar) {
             progressBar.style.width = "100%";
           }
         }
 
         rafId = requestAnimationFrame(tick);
+      }
+
+      if (highlightBtn) {
+        highlightBtn.addEventListener("click", () => {
+          playBgMusic(false);
+          playSceneWebSound(currentIndex + 2);
+          popBounceElements(scenes[currentIndex]);
+
+          highlightBtn.animate(
+            [
+              { transform: "scale(1)" },
+              { transform: "scale(1.14)", offset: 0.45 },
+              { transform: "scale(1)" }
+            ],
+            { duration: 1000, easing: "ease-out" }
+          );
+        });
       }
 
       ["click", "keydown"].forEach((evt) => {
@@ -608,12 +698,12 @@
         replayBtn.addEventListener("click", () => {
           cancelAnimationFrame(rafId);
           playBgMusic(true);
-          showScene(0);
+          showScene(0, true);
           rafId = requestAnimationFrame(tick);
         });
       }
 
-      showScene(0);
+      showScene(0, false);
       playBgMusic(false);
       rafId = requestAnimationFrame(tick);
     })();
