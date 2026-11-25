@@ -1,9 +1,16 @@
-/* Simple Auto Pop-Up Bounce Without Hiding Screen */
 window.addEventListener("DOMContentLoaded", () => {
-  const items = document.querySelectorAll("section > *, .elim-chip, .fanned-cards");
+  const targets = document.querySelectorAll(
+    "section > *, .elim-chip, .fanned-cards, .fan-card, button, .btn"
+  );
 
-  items.forEach((el, i) => {
-    if (!el.animate) return;
+  const uniqueTargets = Array.from(new Set(targets));
+
+  uniqueTargets.forEach((el, index) => {
+    el.style.opacity = "1";
+    el.style.visibility = "visible";
+
+    if (typeof el.animate !== "function") return;
+
     el.animate(
       [
         { transform: "translateY(26px) scale(0.92)" },
@@ -13,7 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
       ],
       {
         duration: 650,
-        delay: Math.min(i * 90, 700),
+        delay: Math.min(index * 90, 720),
         easing: "cubic-bezier(0.22, 1.35, 0.36, 1)",
         fill: "both"
       }
