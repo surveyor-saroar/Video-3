@@ -331,6 +331,8 @@
 </head>
 <body>
 
+  <audio id="bgMusic" src="music3.mp3" loop preload="auto"></audio>
+
   <canvas id="particles"></canvas>
   <div class="ambient ambient-one"></div>
   <div class="ambient ambient-two"></div>
@@ -514,11 +516,27 @@
       const counterEl = document.getElementById("counter");
       const progressBar = document.getElementById("progressBar");
       const replayBtn = document.getElementById("replay");
+      const bgMusic = document.getElementById("bgMusic");
 
       const SCENE_DURATION = 3200;
+      const BG_VOLUME = 0.05; // 5% Volume
+
       let currentIndex = 0;
       let sceneStartTime = performance.now();
       let rafId = null;
+
+      if (bgMusic) {
+        bgMusic.volume = BG_VOLUME;
+      }
+
+      function playBgMusic(restart = false) {
+        if (!bgMusic) return;
+        bgMusic.volume = BG_VOLUME;
+        if (restart) {
+          bgMusic.currentTime = 0;
+        }
+        bgMusic.play().catch(() => {});
+      }
 
       function popBounceElements(scene) {
         const items = scene.querySelectorAll(
@@ -582,15 +600,21 @@
         rafId = requestAnimationFrame(tick);
       }
 
+      ["click", "keydown"].forEach((evt) => {
+        document.addEventListener(evt, () => playBgMusic(false), { once: true });
+      });
+
       if (replayBtn) {
         replayBtn.addEventListener("click", () => {
           cancelAnimationFrame(rafId);
+          playBgMusic(true);
           showScene(0);
           rafId = requestAnimationFrame(tick);
         });
       }
 
       showScene(0);
+      playBgMusic(false);
       rafId = requestAnimationFrame(tick);
     })();
   </script>
