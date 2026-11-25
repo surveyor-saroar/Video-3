@@ -1,20 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const chips = document.querySelectorAll('.elim-chip');
+  const popTargets = document.querySelectorAll('.pop-up-ready, .pop-up');
 
-  function triggerPopUp(chip) {
-    chip.classList.remove('pop-up-active', 'crossed', 'cross-animate');
-    void chip.offsetWidth; // reflow for instant replay
-    chip.classList.add('pop-up-active');
+  function runPopUp(el) {
+    el.classList.remove('pop-up', 'pop-up-ready');
+    void el.offsetWidth; // reflow for clean replay
+    el.classList.add('pop-up');
   }
 
-  chips.forEach((chip, index) => {
-    setTimeout(() => {
-      triggerPopUp(chip);
-    }, 150 + index * 140);
+  popTargets.forEach((el) => {
+    el.classList.add('pop-up-ready');
+    el.classList.remove('pop-up');
 
-    // Click to replay pop-up animation
-    chip.addEventListener('click', () => {
-      triggerPopUp(chip);
+    el.addEventListener('click', () => {
+      runPopUp(el);
     });
   });
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+      visibleEntries.forEach((entry, idx) => {
+        const el = entry.target;
+        const delay = el.dataset.popDelay ? Number(el.dataset.popDelay) : idx * 120;
+
+        setTimeout(() => {
+          runPopUp(el);
+        }, delay);
+
+        obs.unobserve(el);
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  popTargets.forEach((el) => observer.observe(el));
 });
