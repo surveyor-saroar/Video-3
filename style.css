@@ -1,68 +1,38 @@
-/* Updated Red Cross / Strikethrough Effect */
-.elim-chip {
-  position: relative;
-  background: #15151b;
-  border: 1.5px solid rgba(255, 77, 77, 0.45);
-  color: #e4e4e7;
-  padding: 11px 22px;
-  border-radius: 999px;
-  font-size: 1.08rem;
-  font-weight: 700;
-  overflow: visible;
-  box-shadow: 0 0 18px rgba(255, 59, 48, 0.14);
-}
-
-/* Animated Diagonal Red Cross Slash */
-.elim-chip::after {
-  content: "";
-  position: absolute;
-  left: -8%;
-  top: 50%;
-  width: 116%;
-  height: 3.5px;
-  background: linear-gradient(90deg, #ff2a2a, #ff5e5e, #ff1e1e);
-  border-radius: 999px;
-  transform: translateY(-50%) rotate(-9deg) scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
-  box-shadow:
-    0 0 10px rgba(255, 42, 42, 0.9),
-    0 0 22px rgba(255, 42, 42, 0.5);
-  pointer-events: none;
-}
-
-/* Red Cross Badge / X Accent */
-.elim-chip::before {
-  content: "✕";
-  position: absolute;
-  top: -9px;
-  right: -6px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #ff2a2a;
-  color: #ffffff;
-  font-size: 0.78rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Bounce / Pop-up Spring Animation */
+.pop-bounce-init {
   opacity: 0;
-  transform: scale(0.4) rotate(-25deg);
-  transition: transform 0.4s cubic-bezier(0.22, 1.4, 0.36, 1) 0.35s, opacity 0.3s ease 0.35s;
-  box-shadow: 0 0 14px rgba(255, 42, 42, 0.85);
+  transform: translateY(48px) scale(0.76);
+  will-change: transform, opacity;
 }
 
-/* Trigger Red Cross when parent reveals or on hover */
-.reveal.visible .elim-chip::after,
-.elim-chip.crossed::after,
-.elim-chip:hover::after {
-  transform: translateY(-50%) rotate(-9deg) scaleX(1);
-}
-
-.reveal.visible .elim-chip::before,
-.elim-chip.crossed::before,
-.elim-chip:hover::before {
+.pop-bounce {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  animation: springPopBounce 0.72s cubic-bezier(0.22, 1.45, 0.36, 1) forwards;
+}
+
+@keyframes springPopBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(48px) scale(0.76);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-14px) scale(1.06);
+  }
+  76% {
+    transform: translateY(5px) scale(0.97);
+  }
+  90% {
+    transform: translateY(-3px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Optional subtle hover bounce */
+.pop-bounce:hover {
+  transform: translateY(-6px) scale(1.03);
+  transition: transform 0.25s cubic-bezier(0.22, 1.35, 0.36, 1);
 }
