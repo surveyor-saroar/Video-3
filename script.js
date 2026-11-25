@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const targets = document.querySelectorAll('.pop-return-init');
+  const chips = document.querySelectorAll('.elim-chip');
 
-  targets.forEach((el, index) => {
-    const customDelay = el.dataset.returnDelay ? Number(el.dataset.returnDelay) : index * 140;
+  chips.forEach((chip, index) => {
+    chip.classList.remove('crossed');
     setTimeout(() => {
-      el.classList.add('pop-return-active');
-      el.classList.remove('pop-return-init');
-    }, 150 + customDelay);
+      chip.classList.add('anim-play');
+    }, 150 + index * 140);
   });
 });
