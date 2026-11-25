@@ -1,38 +1,32 @@
-/* Bounce / Pop-up Spring Animation */
-.pop-bounce-init {
+/* Bounce / Pop-up Then Return From Below to Final Position */
+.pop-return-init {
   opacity: 0;
-  transform: translateY(48px) scale(0.76);
+  transform: translateY(calc(var(--y, 0px) + 65px)) scale(0.78) rotate(calc(var(--tilt, 0deg) * 0.6));
   will-change: transform, opacity;
 }
 
-.pop-bounce {
+.pop-return-active {
   opacity: 1;
-  animation: springPopBounce 0.72s cubic-bezier(0.22, 1.45, 0.36, 1) forwards;
+  animation: popUpThenReturnFromBelow 0.92s cubic-bezier(0.22, 1.35, 0.36, 1) forwards;
 }
 
-@keyframes springPopBounce {
+@keyframes popUpThenReturnFromBelow {
   0% {
     opacity: 0;
-    transform: translateY(48px) scale(0.76);
+    transform: translateY(calc(var(--y, 0px) + 65px)) scale(0.78) rotate(calc(var(--tilt, 0deg) * 0.6));
   }
-  55% {
+  35% {
     opacity: 1;
-    transform: translateY(-14px) scale(1.06);
+    transform: translateY(calc(var(--y, 0px) - 24px)) scale(calc(var(--scale, 1) * 1.06)) rotate(var(--tilt, 0deg));
   }
-  76% {
-    transform: translateY(5px) scale(0.97);
+  65% {
+    transform: translateY(calc(var(--y, 0px) + 14px)) scale(calc(var(--scale, 1) * 0.97)) rotate(var(--tilt, 0deg));
   }
-  90% {
-    transform: translateY(-3px) scale(1.02);
+  84% {
+    transform: translateY(calc(var(--y, 0px) - 5px)) scale(calc(var(--scale, 1) * 1.02)) rotate(var(--tilt, 0deg));
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(var(--y, 0px)) scale(var(--scale, 1)) rotate(var(--tilt, 0deg));
   }
-}
-
-/* Optional subtle hover bounce */
-.pop-bounce:hover {
-  transform: translateY(-6px) scale(1.03);
-  transition: transform 0.25s cubic-bezier(0.22, 1.35, 0.36, 1);
 }
