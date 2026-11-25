@@ -1,19 +1,86 @@
-/* Pop-Up Animation for Remaining Elements (.pop-up) */
-.pop-up-ready {
-  opacity: 0;
-  transform: translateY(32px) scale(0.82);
+/* Automatic Red Cross Effect on .elim-chip (No Mouse Dependency) */
+.elim-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #15151b;
+  border: 1.5px solid rgba(255, 77, 77, 0.55);
+  color: #f4f4f6;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  overflow: visible;
+  box-shadow: 0 0 18px rgba(255, 59, 48, 0.18);
   will-change: transform, opacity;
 }
 
-.pop-up {
-  opacity: 1;
-  animation: remainingPopUp 0.65s cubic-bezier(0.22, 1.42, 0.36, 1) forwards;
+.elim-chip::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  top: 50%;
+  width: 116%;
+  height: 3.5px;
+  background: linear-gradient(90deg, #ff2a2a, #ff6b6b, #ff1e1e);
+  border-radius: 999px;
+  transform: translateY(-50%) rotate(-9deg) scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+  box-shadow:
+    0 0 10px rgba(255, 42, 42, 0.9),
+    0 0 22px rgba(255, 42, 42, 0.5);
+  pointer-events: none;
 }
 
-@keyframes remainingPopUp {
+.elim-chip::before {
+  content: "✕";
+  position: absolute;
+  top: -9px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff2a2a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.4) rotate(-25deg);
+  transition: transform 0.4s cubic-bezier(0.22, 1.4, 0.36, 1) 0.3s, opacity 0.3s ease 0.3s;
+  box-shadow: 0 0 14px rgba(255, 42, 42, 0.85);
+  pointer-events: none;
+}
+
+.elim-chip.auto-pop-active::after {
+  transform: translateY(-50%) rotate(-9deg) scaleX(1);
+}
+
+.elim-chip.auto-pop-active::before {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Automatic Pop-Up Animation (No Mouse Dependency) */
+.auto-pop-hidden {
+  opacity: 0;
+  transform: translateY(34px) scale(0.82);
+  will-change: transform, opacity;
+}
+
+.auto-pop-active {
+  opacity: 1;
+  animation: autoSmoothPopUp 0.65s cubic-bezier(0.22, 1.42, 0.36, 1) forwards;
+}
+
+@keyframes autoSmoothPopUp {
   0% {
     opacity: 0;
-    transform: translateY(32px) scale(0.82);
+    transform: translateY(34px) scale(0.82);
   }
   62% {
     opacity: 1;
@@ -26,9 +93,4 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-.pop-up:hover {
-  transform: translateY(-5px) scale(1.03);
-  transition: transform 0.25s cubic-bezier(0.22, 1.35, 0.36, 1);
 }
