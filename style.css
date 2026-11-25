@@ -1,57 +1,77 @@
-/* Clean Pop-Up Animation (Without Red Cross) */
+/* Red Cross + Smooth Pop Entrance for .elim-chip */
 .elim-chip {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: #15151b;
-  border: 1.5px solid rgba(255, 183, 3, 0.5);
+  border: 1.5px solid rgba(255, 77, 77, 0.55);
   color: #f4f4f6;
   padding: 11px 22px;
   border-radius: 999px;
   font-size: 1.08rem;
   font-weight: 700;
-  overflow: hidden;
-  box-shadow: 0 0 18px rgba(255, 183, 3, 0.15);
-  opacity: 0;
-  transform: scale(0.55) translateY(20px);
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: visible;
+  box-shadow: 0 0 18px rgba(255, 59, 48, 0.18);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   will-change: transform, opacity;
 }
 
-/* Remove any red cross pseudo-elements if present */
-.elim-chip::before,
+/* Diagonal Red Strikethrough Line */
 .elim-chip::after {
-  content: none !important;
-  display: none !important;
+  content: "";
+  position: absolute;
+  left: -8%;
+  top: 50%;
+  width: 116%;
+  height: 3.5px;
+  background: linear-gradient(90deg, #ff2a2a, #ff6b6b, #ff1e1e);
+  border-radius: 999px;
+  transform: translateY(-50%) rotate(-9deg) scaleX(1);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+  box-shadow:
+    0 0 10px rgba(255, 42, 42, 0.9),
+    0 0 22px rgba(255, 42, 42, 0.5);
+  pointer-events: none;
 }
 
-.elim-chip.pop-up-active {
+/* Top-Right Red Cross Badge */
+.elim-chip::before {
+  content: "✕";
+  position: absolute;
+  top: -9px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff2a2a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 1;
-  animation: smoothPopUp 0.62s cubic-bezier(0.22, 1.42, 0.36, 1) forwards;
+  transform: scale(1) rotate(0deg);
+  transition: transform 0.38s cubic-bezier(0.22, 1.4, 0.36, 1) 0.25s, opacity 0.28s ease 0.25s;
+  box-shadow: 0 0 14px rgba(255, 42, 42, 0.85);
+  pointer-events: none;
 }
 
-@keyframes smoothPopUp {
-  0% {
-    opacity: 0;
-    transform: scale(0.55) translateY(20px);
-  }
-  65% {
-    opacity: 1;
-    transform: scale(1.08) translateY(-6px);
-  }
-  85% {
-    transform: scale(0.97) translateY(2px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+/* Optional Replay / Hover Boost */
+.elim-chip:hover {
+  transform: translateY(-3px) scale(1.03);
+  border-color: #ff4d4d;
+  box-shadow: 0 0 24px rgba(255, 42, 42, 0.32);
 }
 
-.elim-chip.pop-up-active:hover {
-  transform: scale(1.05) translateY(-3px);
-  border-color: #ffd166;
-  box-shadow: 0 0 26px rgba(255, 183, 3, 0.35);
+.elim-chip:hover::after {
+  transform: translateY(-50%) rotate(-9deg) scaleX(1.04);
+}
+
+.elim-chip:hover::before {
+  transform: scale(1.12) rotate(8deg);
 }
