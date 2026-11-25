@@ -1,10 +1,4 @@
-/* Keep dark background intact and never lock opacity to 0 */
-html, body {
-  background-color: #090d16;
-  color: #f4f4f6;
-  min-height: 100vh;
-}
-
+/* Red Cross Effect for .elim-chip */
 .elim-chip {
   position: relative;
   display: inline-flex;
@@ -13,6 +7,7 @@ html, body {
   overflow: visible;
 }
 
+/* Diagonal Red Strikethrough Line */
 .elim-chip::after {
   content: "";
   position: absolute;
@@ -22,12 +17,15 @@ html, body {
   height: 3.5px;
   background: linear-gradient(90deg, #ff2a2a, #ff6b6b, #ff1e1e);
   border-radius: 999px;
-  transform: translateY(-50%) rotate(-9deg) scaleX(1);
-  transform-origin: left center;
-  box-shadow: 0 0 12px rgba(255, 42, 42, 0.85);
+  transform: translateY(-50%) rotate(-9deg);
+  transform-origin: center;
+  box-shadow:
+    0 0 10px rgba(255, 42, 42, 0.9),
+    0 0 22px rgba(255, 42, 42, 0.5);
   pointer-events: none;
 }
 
+/* Top-Right Red Cross Badge */
 .elim-chip::before {
   content: "✕";
   position: absolute;
