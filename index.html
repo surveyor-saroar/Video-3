@@ -87,7 +87,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 40px 28px 90px;
+      padding: 40px 28px 115px;
       background: transparent;
     }
 
@@ -283,35 +283,66 @@
       gap: 6px;
     }
 
-    .bottom-bar {
+    .bottom-controls {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 18px;
       z-index: 30;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 14px;
+      gap: 10px;
       padding: 0 24px;
+      pointer-events: none;
     }
 
-    #highlightBtn {
-      padding: 11px 24px;
+    .action-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    #highlightBtn,
+    #dropperBtn {
+      padding: 10px 20px;
       border-radius: 999px;
-      border: 1.5px solid #fbbf24;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: #090d16;
-      font-size: 0.98rem;
-      font-weight: 900;
+      font-size: 0.95rem;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 0 22px rgba(251, 191, 36, 0.45);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    #highlightBtn:hover {
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 0 28px rgba(251, 191, 36, 0.7);
+    #highlightBtn {
+      border: 1.5px solid #fbbf24;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #090d16;
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+
+    #dropperBtn {
+      border: 1.5px solid rgba(251, 191, 36, 0.55);
+      background: rgba(15, 23, 42, 0.85);
+      color: #fbbf24;
+    }
+
+    #highlightBtn:hover,
+    #dropperBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #bottom-caption {
+      pointer-events: auto;
+      background-color: rgba(9, 13, 22, 0.24);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      backdrop-filter: blur(6px);
     }
 
     .progress {
@@ -375,7 +406,7 @@
 
   <main id="stage">
 
-    <section class="scene active">
+    <section class="scene active" data-caption="✦ সিন ০১: নিজের আইডিয়া দিয়েই অসাধারণ ডিজাইন তৈরি করুন">
       <p class="eyebrow">CREATIVE • AI • DESIGN</p>
       <h1>অথচ <em>নিজেই</em><br>বানাতে পারেন</h1>
 
@@ -402,7 +433,7 @@
       <p class="subline">নিজের আইডিয়াকে রূপ দিন অসাধারণ ডিজাইনে</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০২: একটি প্রম্পট থেকেই শুরু হোক নতুন সৃষ্টি">
       <div class="searchbar">
         <span>⌕</span>
         <span class="typing">আপনার আইডিয়া লিখুন, model দিয়ে...</span>
@@ -419,7 +450,7 @@
       <p class="subline">একটি prompt থেকেই শুরু হতে পারে নতুন সৃষ্টি</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৩: ভিডিও এডিটিং ও এআই ক্রিয়েটিভ স্কিল শিখুন">
       <div class="showcase">
         <div class="portrait">
           <div class="person-shape"></div>
@@ -436,7 +467,7 @@
       <p class="subline">নিজের দক্ষতাকে নিয়ে যান পরবর্তী ধাপে</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৪: SUCCESS OF SKILL — AI Motion Graphics">
       <div class="logo-large">
         <span>✦</span> SUCCESS
         <small>OF SKILL</small>
@@ -446,7 +477,7 @@
       <p class="subline">সৃজনশীলতার নতুন দিগন্ত</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৫: ডিজাইন, ভিডিও, ব্র্যান্ডিং ও মার্কেটিংয়ে গ্রো করুন">
       <h2>আপনার business <em>গ্রো</em> হোক</h2>
 
       <div class="service-grid">
@@ -463,7 +494,7 @@
       <p class="subline">আপনার আইডিয়াই হতে পারে পরবর্তী সফলতা</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৬: ভয়েসওভার ও প্রফেশনাল এডিটিং শিখুন">
       <div class="floating-cards voice-cards">
         <article class="mini-card">
           <div class="fake-photo photo-b"></div>
@@ -480,7 +511,7 @@
       <p class="subline">Informative hook, storytelling ও creative presentation</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৭: কোর্সের সাথে ২টি FREE Bonus">
       <h2>course কিনলেই পাচ্ছেন</h2>
       <h1 class="bonus">দুইটা <em>FREE bonus</em></h1>
 
@@ -492,7 +523,7 @@
       <p class="subline">শেখার পথে বাড়তি সুবিধা</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৮: কাজের স্কিল গড়ার বাস্তব কোর্স">
       <p class="eyebrow">YOUR NEXT STEP</p>
       <h2>আমরা সবসময় course বানাই না</h2>
       <h1>কাজের <em>course</em></h1>
@@ -502,7 +533,7 @@
       <p class="subline">দক্ষতা গড়ুন, নিজের ভবিষ্যৎ তৈরি করুন</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ০৯: দেরি না করে আজই শুরু করুন">
       <div class="cta-pills">
         <span>✓ Qualified Video</span>
         <span>✓ Customer Focus</span>
@@ -514,7 +545,7 @@
       <p class="subline">আপনার সৃজনশীল যাত্রা শুরু হোক আজ থেকে</p>
     </section>
 
-    <section class="scene">
+    <section class="scene" data-caption="✦ সিন ১০: SUCCESS OF SKILL — Create your success">
       <div class="logo-large">
         <span>✦</span> SUCCESS
         <small>OF SKILL</small>
@@ -533,8 +564,12 @@
 
   </main>
 
-  <div class="bottom-bar">
-    <button id="highlightBtn" type="button">✦ হাইলাইট দেখুন</button>
+  <div class="bottom-controls">
+    <div id="bottom-caption">✦ সিন ০১: নিজের আইডিয়া দিয়েই অসাধারণ ডিজাইন তৈরি করুন</div>
+    <div class="action-row">
+      <button id="dropperBtn" type="button">💧 ড্রপার হাইলাইট</button>
+      <button id="highlightBtn" type="button">✦ হাইলাইট দেখুন</button>
+    </div>
   </div>
 
   <div class="progress">
@@ -552,10 +587,13 @@
       const progressBar = document.getElementById("progressBar");
       const replayBtn = document.getElementById("replay");
       const highlightBtn = document.getElementById("highlightBtn");
+      const dropperBtn = document.getElementById("dropperBtn");
+      const bottomCaption = document.getElementById("bottom-caption");
       const bgMusic = document.getElementById("bgMusic");
 
-      const SCENE_DURATION = 1000; // 1k = 1000ms (1 সেকেন্ড)
+      const SCENE_DURATION = 3000; // ৩ সেকেন্ড প্রতি সিন
       const BG_VOLUME = 0.07; // ব্যাকগ্রাউন্ড সাউন্ড 7%
+      const WEB_SOUND_GAIN = 0.28; // ওয়েব সাউন্ড স্পষ্ট ভলিউম (28%)
 
       let currentIndex = 0;
       let sceneStartTime = performance.now();
@@ -575,7 +613,7 @@
         bgMusic.play().catch(() => {});
       }
 
-      function playSceneWebSound(stepIndex = 0) {
+      function playSceneWebSound(stepIndex = 0, isDropper = false) {
         try {
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
           if (!AudioContextClass) return;
@@ -591,20 +629,22 @@
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
 
-          osc.type = "triangle";
-          const baseFreq = 340 + (stepIndex % 5) * 55;
-          osc.frequency.setValueAtTime(baseFreq, now);
-          osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.35, now + 0.14);
+          osc.type = isDropper ? "sine" : "triangle";
+          const startFreq = isDropper ? 520 : 320 + (stepIndex % 6) * 50;
+          const endFreq = isDropper ? 840 : startFreq * 1.4;
+
+          osc.frequency.setValueAtTime(startFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.18);
 
           gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.18);
+          gain.gain.linearRampToValueAtTime(WEB_SOUND_GAIN, now + 0.025);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
           osc.connect(gain);
           gain.connect(audioCtx.destination);
 
           osc.start(now);
-          osc.stop(now + 0.19);
+          osc.stop(now + 0.3);
         } catch (_) {}
       }
 
@@ -623,13 +663,21 @@
               { transform: "translateY(0) scale(1)" }
             ],
             {
-              duration: 1000,
-              delay: Math.min(idx * 60, 400),
+              duration: 750,
+              delay: Math.min(idx * 70, 420),
               easing: "cubic-bezier(0.22, 1.35, 0.36, 1)",
               fill: "both"
             }
           );
         });
+      }
+
+      function updateCaption(scene) {
+        if (!bottomCaption || !scene) return;
+        const text = scene.getAttribute("data-caption");
+        if (text) {
+          bottomCaption.textContent = text;
+        }
       }
 
       function showScene(index, playSound = true) {
@@ -646,10 +694,12 @@
           counterEl.textContent = `${num} / ${total}`;
         }
 
+        updateCaption(scenes[currentIndex]);
         sceneStartTime = performance.now();
         popBounceElements(scenes[currentIndex]);
+
         if (playSound) {
-          playSceneWebSound(currentIndex);
+          playSceneWebSound(currentIndex, false);
         }
       }
 
@@ -673,19 +723,36 @@
         rafId = requestAnimationFrame(tick);
       }
 
+      if (dropperBtn) {
+        dropperBtn.addEventListener("click", () => {
+          playBgMusic(false);
+          playSceneWebSound(currentIndex, true);
+          if (bottomCaption) {
+            bottomCaption.animate(
+              [
+                { transform: "scale(1)" },
+                { transform: "scale(1.06)", offset: 0.45 },
+                { transform: "scale(1)" }
+              ],
+              { duration: 500, easing: "ease-out" }
+            );
+          }
+        });
+      }
+
       if (highlightBtn) {
         highlightBtn.addEventListener("click", () => {
           playBgMusic(false);
-          playSceneWebSound(currentIndex + 2);
+          playSceneWebSound(currentIndex + 2, false);
           popBounceElements(scenes[currentIndex]);
 
           highlightBtn.animate(
             [
               { transform: "scale(1)" },
-              { transform: "scale(1.14)", offset: 0.45 },
+              { transform: "scale(1.12)", offset: 0.45 },
               { transform: "scale(1)" }
             ],
-            { duration: 1000, easing: "ease-out" }
+            { duration: 700, easing: "ease-out" }
           );
         });
       }
