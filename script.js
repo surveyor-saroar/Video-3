@@ -1,37 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const popTargets = document.querySelectorAll('.pop-up-ready, .pop-up');
+  const selector = [
+    '.elim-chip',
+    '.bonus-card',
+    '.skill-card',
+    '.feature-card',
+    '.module-card',
+    '.faq-item',
+    '.cta-btn',
+    'section .card'
+  ].join(', ');
 
-  function runPopUp(el) {
-    el.classList.remove('pop-up', 'pop-up-ready');
-    void el.offsetWidth; // reflow for clean replay
-    el.classList.add('pop-up');
+  const autoTargets = Array.from(document.querySelectorAll(selector)).filter(
+    (el) => !el.classList.contains('fan-card')
+  );
+
+  function runAutoAnimation(el) {
+    if (el.dataset.autoAnimated === 'true') return;
+    el.dataset.autoAnimated = 'true';
+    el.classList.remove('auto-pop-hidden');
+    void el.offsetWidth;
+    el.classList.add('auto-pop-active');
   }
 
-  popTargets.forEach((el) => {
-    el.classList.add('pop-up-ready');
-    el.classList.remove('pop-up');
-
-    el.addEventListener('click', () => {
-      runPopUp(el);
-    });
+  autoTargets.forEach((el) => {
+    el.classList.add('auto-pop-hidden');
   });
 
   const observer = new IntersectionObserver(
     (entries, obs) => {
-      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-      visibleEntries.forEach((entry, idx) => {
+      const visible = entries.filter((entry) => entry.isIntersecting);
+      visible.forEach((entry, index) => {
         const el = entry.target;
-        const delay = el.dataset.popDelay ? Number(el.dataset.popDelay) : idx * 120;
-
         setTimeout(() => {
-          runPopUp(el);
-        }, delay);
-
+          runAutoAnimation(el);
+        }, index * 120);
         obs.unobserve(el);
       });
     },
-    { threshold: 0.15 }
+    { threshold: 0.12 }
   );
 
-  popTargets.forEach((el) => observer.observe(el));
+  autoTargets.forEach((el) => observer.observe(el));
+
+  // Immediately run for items already visible on screen at load
+  setTimeout(() => {
+    autoTargets.forEach((el, index) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.95) {
+        setTimeout(() => runAutoAnimation(el), index * 120);
+      }
+    });
+  }, 120);
 });
